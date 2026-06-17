@@ -1,9 +1,0 @@
-{
-  "apiKey": "mock-api-key-epicreads",
-  "authDomain": "mock-epicreads.firebaseapp.com",
-  "projectId": "mock-epicreads",
-  "storageBucket": "mock-epicreads.appspot.com",
-  "messagingSenderId": "1234567890",
-  "appId": "1:1234567890:web:abcdef123456",
-  "firestoreDatabaseId": "(default)"
-}
