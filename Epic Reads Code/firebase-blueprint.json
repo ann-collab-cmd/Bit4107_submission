@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account profiling and basic customer info",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The firebase auth user unique identifier" },
+        "fullName": { "type": "string", "description": "The customer's full name" },
+        "phoneNumber": { "type": "string", "description": "The customer's phone contact" },
+        "email": { "type": "string", "format": "email", "description": "The customer's contact email" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Registration time" }
+      },
+      "required": ["uid", "fullName", "phoneNumber", "email", "createdAt"]
+    },
+    "Book": {
+      "title": "Book Product",
+      "description": "Information about a book product for sale in KES",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Book resource identifier" },
+        "title": { "type": "string", "description": "Title of the book" },
+        "author": { "type": "string", "description": "Author of the book" },
+        "category": { "type": "string", "description": "Category/Genre" },
+        "description": { "type": "string", "description": "Book summary/synopsis" },
+        "price": { "type": "number", "description": "Physical copy unit price in KES" },
+        "pdfPrice": { "type": "number", "description": "Optional PDF soft copy unit price in KES" },
+        "pdfUrl": { "type": "string", "description": "Optional PDF URL file link" },
+        "stockStatus": { "type": "string", "enum": ["Available", "Low Stock", "Out of Stock"] },
+        "imageUrl": { "type": "string", "description": "Relative URL path to the cover image artifact" },
+        "quantity": { "type": "number", "description": "Quantity in stock" }
+      },
+      "required": ["id", "title", "author", "category", "description", "price", "stockStatus", "imageUrl", "quantity"]
+    },
+    "Order": {
+      "title": "Book Order",
+      "description": "Customer purchase of a book, phyisical or digital soft copy",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Order receipt identifier" },
+        "userId": { "type": "string", "description": "Associated user ID (if authenticated)" },
+        "customerName": { "type": "string", "description": "Customer name for delivery" },
+        "phoneNumber": { "type": "string", "description": "Customer phone contact" },
+        "bookId": { "type": "string", "description": "The purchased book ID" },
+        "bookTitle": { "type": "string", "description": "Title of the ordered book" },
+        "quantity": { "type": "number", "description": "Quantity ordered" },
+        "deliveryLocation": { "type": "string", "description": "Physical address or email for delivery" },
+        "notes": { "type": "string", "description": "Custom customer order notes" },
+        "totalPrice": { "type": "number", "description": "The total sum in KES" },
+        "orderType": { "type": "string", "enum": ["Physical", "PDF"] },
+        "status": { "type": "string", "enum": ["Pending", "Processing", "Delivered", "Cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "customerName", "phoneNumber", "bookId", "bookTitle", "quantity", "deliveryLocation", "totalPrice", "orderType", "status", "createdAt"]
+    },
+    "Reservation": {
+      "title": "Book Reservation",
+      "description": "Reservation for store-pick up of books the client is unable to buy immediately",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "bookId": { "type": "string" },
+        "bookTitle": { "type": "string" },
+        "expectedPurchaseDate": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Completed", "Cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "customerName", "phoneNumber", "bookId", "bookTitle", "expectedPurchaseDate", "status", "createdAt"]
+    },
+    "BookRequest": {
+      "title": "Book Request",
+      "description": "Request for a product out of stock or unavailable in store catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "phoneNumber": { "type": "string" },
+        "bookTitle": { "type": "string" },
+        "author": { "type": "string" },
+        "notes": { "type": "string" },
+        "status": { "type": "string", "enum": ["Sourcing", "Available", "Completed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "customerName", "phoneNumber", "bookTitle", "notes", "status", "createdAt"]
+    },
+    "InAppNotification": {
+      "title": "In App Notification",
+      "description": "Simple alerts to customers and storefront owner dashboards",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string", "description": "The user receiving notifications, or 'admin' for system logs" },
+        "message": { "type": "string", "description": "Detail sentence" },
+        "type": { "type": "string", "enum": ["order", "reservation", "request", "status_update", "general"] },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "message", "type", "read", "createdAt"]
+    },
+    "ActivityHistory": {
+      "title": "Activity History Log",
+      "description": "A capture log of customer events occurring in the books portal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "actionDescription": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "userName", "actionDescription", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "User details matching authentication record"
+    },
+    "books/{bookId}": {
+      "schema": "Book",
+      "description": "Store collection index representing books physical/digital catalog"
+    },
+    "orders/{orderId}": {
+      "schema": "Order",
+      "description": "All customer book purchase order records"
+    },
+    "reservations/{reservationId}": {
+      "schema": "Reservation",
+      "description": "User book reserves and pickups schedule logs"
+    },
+    "bookRequests/{requestId}": {
+      "schema": "BookRequest",
+      "description": "User submissions requesting out-of-stock items"
+    },
+    "notifications/{notificationId}": {
+      "schema": "InAppNotification",
+      "description": "Alert flags for admin actions and customer orders"
+    },
+    "activityLogs/{logId}": {
+      "schema": "ActivityHistory",
+      "description": "User activities tracking logs for James"
+    }
+  }
+}
