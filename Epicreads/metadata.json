@@ -1,0 +1,6 @@
+{
+  "name": "EpicReads",
+  "description": "A beautiful responsive digital bookstore platform that allows patrons to browse, purchase, reserve, and request bestselling book titles.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
